@@ -2,24 +2,24 @@
 
 // 1. Initialize the game
 function initGame() {
-    // Set up Three.js or Babylon.js scene
+    // Set up Three.js scene
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('game-canvas') });
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    // Load 3D models (hills, buildings, futuristic elements)
-    // Use loaders like THREE.GLTFLoader to import models created in Blender
-    const landscape = load3DModel('path/to/landscape.glb');
+    // Load 3D landscape (based on the image: rolling hills, buildings)
+    const landscape = load3DModel('path/to/landscape.glb'); // Use a 3D model of the hills and buildings
     scene.add(landscape);
 
-    // Add futuristic lighting (e.g., point lights, ambient light with neon effects)
-    const light = new THREE.PointLight(0x00f0ff, 1, 100);
-    light.position.set(50, 50, 50);
+    // Add natural lighting (sunlight for the golden hour effect)
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(1, 1, 1);
     scene.add(light);
+    scene.add(new THREE.AmbientLight(0x404040));
 
-    // Set up camera position for flying (initially above the landscape)
-    camera.position.set(0, 50, 100);
+    // Set initial camera position for flying (above the landscape)
+    camera.position.set(0, 50, 100); // Start high to fly freely
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     // Handle window resize
@@ -34,53 +34,46 @@ function initGame() {
 document.getElementById('start-button').addEventListener('click', () => {
     // Hide intro screen
     document.getElementById('intro-screen').style.display = 'none';
-    // Show game UI
-    document.getElementById('game-ui').classList.remove('hidden');
+    // Show joystick
+    document.getElementById('joystick').classList.remove('hidden');
     // Start the game
     initGame();
     animate();
 });
 
-// 3. Flying Mechanics
-let playerPosition = { x: 0, y: 50, z: 0 };
-let velocity = { x: 0, y: 0, z: 0 };
-let speed = 0;
+// 3. Flying Mechanics with Joystick
+let playerPosition = { x: 0, y: 50, z: 0 }; // Start at a good flying height
+let velocity = { x: 0, z: 0 };
+let speed = 0.1; // Adjust for smooth flying
 
 function updatePlayerMovement() {
-    // Get joystick input (simplified)
     const joystick = document.getElementById('joystick');
     let joystickX = 0, joystickY = 0;
 
-    // Simulate joystick movement (touch/mouse events)
+    // Simulate joystick movement (touch/mouse events for desktop/mobile)
     joystick.addEventListener('mousemove', (e) => {
-        // Calculate joystick position relative to center
         const rect = joystick.getBoundingClientRect();
         joystickX = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
         joystickY = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
-        // Clamp values to -1 to 1
-        joystickX = Math.max(-1, Math.min(1, joystickX));
+        joystickX = Math.max(-1, Math.min(1, joystickX)); // Clamp to -1 to 1
         joystickY = Math.max(-1, Math.min(1, joystickY));
     });
 
     // Apply movement based on joystick
-    velocity.x = joystickX * 0.1; // Adjust speed as needed
-    velocity.z = joystickY * 0.1;
+    velocity.x = joystickX * speed;
+    velocity.z = joystickY * speed;
 
-    // Update position
+    // Update position (free flying)
     playerPosition.x += velocity.x;
     playerPosition.z += velocity.z;
 
-    // Gravity or elevation control (simplified)
-    if (playerPosition.y > 50) playerPosition.y -= 0.01; // Prevent flying too high
-    if (playerPosition.y < 50) playerPosition.y += 0.01; // Maintain altitude
+    // Maintain a consistent flying height (or allow slight up/down with Y input)
+    if (joystickY < 0 && playerPosition.y > 30) playerPosition.y -= 0.05; // Dive
+    if (joystickY > 0 && playerPosition.y < 100) playerPosition.y += 0.05; // Climb
 
     // Update camera position
     camera.position.set(playerPosition.x, playerPosition.y, playerPosition.z);
     camera.lookAt(new THREE.Vector3(playerPosition.x, playerPosition.y - 10, playerPosition.z));
-
-    // Update HUD (altitude, speed)
-    document.getElementById('altitude').textContent = `Altitude: ${Math.round(playerPosition.y)}m`;
-    document.getElementById('speed').textContent = `Speed: ${Math.round(speed * 10)}km/h`;
 }
 
 // 4. Animation Loop
@@ -90,19 +83,4 @@ function animate() {
     renderer.render(scene, camera);
 }
 
-// 5. Futuristic UI Effects
-// Add particle effects, glowing text, and holographic animations using Three.js or CSS
-function addFuturisticUI() {
-    // Create glowing particles around joystick or HUD
-    const particles = new THREE.Points(/* particle geometry and material */);
-    scene.add(particles);
-
-    // Animate HUD text with neon glow
-    const hudElements = document.querySelectorAll('.hud span');
-    hudElements.forEach(element => {
-        element.style.animation = 'neonGlow 2s infinite';
-    });
-}
-
-// Initialize UI and start
-addFuturisticUI();
+// Start with a clean, simple experience
