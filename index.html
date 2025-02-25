@@ -3,30 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free - Futuristic Flying Simulator</title>
+    <title>Free - Flying Simulation</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Intro Page -->
     <div id="intro-screen" class="intro-screen">
         <h1>Free</h1>
-        <p>Designed by Kofi Fosu | cosmoscoderr@gmail.com</p>
         <button id="start-button" class="start-button">Tap to Start</button>
     </div>
 
     <!-- Game Canvas -->
     <canvas id="game-canvas"></canvas>
 
-    <!-- Joystick and UI Container (hidden initially) -->
-    <div id="game-ui" class="game-ui hidden">
-        <div id="joystick" class="joystick"></div>
-        <div id="hud" class="hud">
-            <span id="altitude">Altitude: 0m</span>
-            <span id="speed">Speed: 0km/h</span>
-        </div>
-    </div>
+    <!-- Joystick for Movement (hidden initially) -->
+    <div id="joystick" class="joystick hidden"></div>
 
-    <script src="three.js"></script> <!-- Or Babylon.js, depending on preference -->
+    <script src="three.js"></script> <!-- Or Babylon.js -->
     <script src="game.js"></script>
 </body>
 </html>
