@@ -1,0 +1,68 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background: #000;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.intro-screen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    z-index: 10;
+}
+
+.start-button {
+    padding: 20px 40px;
+    font-size: 24px;
+    background: linear-gradient(45deg, #00f0ff, #ff00ff);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 20px rgba(0, 240, 255, 0.5); }
+    50% { box-shadow: 0 0 40px rgba(0, 240, 255, 0.8); }
+    100% { box-shadow: 0 0 20px rgba(0, 240, 255, 0.5); }
+}
+
+#game-canvas {
+    width: 100vw;
+    height: 100vh;
+}
+
+.game-ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+}
+
+.joystick {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    border: 2px solid #00f0ff;
+    box-shadow: 0 0 10px #00f0ff;
+}
+
+.hud {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #00f0ff;
+    font-size: 18px;
+    text-shadow: 0 0 5px #00f0ff;
+}
